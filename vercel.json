@@ -1,8 +1,5 @@
 {
   "version": 2,
-  "env": {
-    "GIPHY_API_KEY": "@giphy_api_key"
-  },
   "functions": {
     "api/**/*.js": {
       "memory": 1024,
