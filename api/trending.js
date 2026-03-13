@@ -2,9 +2,12 @@
 // Route: /api/trending
 
 export default async function handler(req, res) {
-  // CORS
+  // CORS - Configuration dynamique selon EXTENSION_ID
+  const extensionId = process.env.EXTENSION_ID || 'soon';
+  const allowAllOrigins = extensionId === 'soon';
+  
   res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*'); // À remplacer par chrome-extension://YOUR_EXTENSION_ID
+  res.setHeader('Access-Control-Allow-Origin', allowAllOrigins ? '*' : `chrome-extension://${extensionId}`);
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 

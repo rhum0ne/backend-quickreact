@@ -58,11 +58,19 @@
    - Onglet "Settings"
    - Section "Environment Variables"
 
-2. **Ajoutez la variable**
+2. **Ajoutez les variables**
    - **Name** : `GIPHY_API_KEY`
    - **Value** : Votre clé Giphy (ex: `abc123xyz...`)
    - **Environment** : Cochez toutes (Production, Preview, Development)
    - Cliquez sur "Save"
+   
+   - **Name** : `EXTENSION_ID`
+   - **Value** : `soon` (pour dev/test) ou votre ID d'extension Chrome
+   - **Environment** : Cochez toutes
+   - Cliquez sur "Save"
+   
+   💡 **Astuce** : Mettez `soon` au début pour désactiver la vérification CORS. 
+   Vous pourrez mettre le vrai ID d'extension plus tard.
 
 3. **Redéployer**
    - Onglet "Deployments"
@@ -116,9 +124,11 @@ Suivez les instructions :
 
 ```bash
 vercel env add GIPHY_API_KEY
-```
+# Entrez votre clé quand demandé
 
-Entrez votre clé quand demandé.
+vercel env add EXTENSION_ID
+# Entrez "soon" pour dev ou votre ID d'extension pour prod
+```
 
 ### Déployer en production
 
@@ -200,7 +210,13 @@ Remplacez `quickreact-api.vercel.app` par votre URL Vercel.
 → Vérifiez les logs : Dashboard Vercel → Votre projet → Logs
 
 ### CORS Error dans l'extension
-→ Vérifiez les `Access-Control-Allow-Origin` dans `api/search.js` et `api/trending.js`
+**Pendant le développement :**
+→ Assurez-vous que `EXTENSION_ID` est défini sur `"soon"` dans Vercel (permet tous les origins)
+
+**En production :**
+→ Définissez `EXTENSION_ID` avec votre vrai ID d'extension : `chrome-extension://abcd...`
+→ Vérifiez que `manifest.json` et le backend utilisent le même ID
+→ Les `Access-Control-Allow-Origin` dans `api/search.js` et `api/trending.js` s'ajustent automatiquement
 
 ### 429 Too Many Requests
 → Vous avez dépassé la limite Giphy (42k/jour). Attendez 24h ou upgradez.

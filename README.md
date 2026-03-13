@@ -178,7 +178,8 @@ backend-example/
 
 3. **Configurez les variables**
    - Dashboard → Settings → Environment Variables
-   - Ajoutez : `GIPHY_API_KEY` = votre clé
+   - Ajoutez : `GIPHY_API_KEY` = votre clé Giphy
+   - Ajoutez : `EXTENSION_ID` = `soon` (pour dev) ou votre ID d'extension (pour prod)
    - Environnements : Production, Preview, Development
 
 4. **Déployez**
@@ -372,13 +373,27 @@ Configurez dans Vercel Dashboard → Environment Variables.
 
 ### CORS
 
-Les endpoints sont configurés pour autoriser toutes les origines (`*`) par défaut.
+Les endpoints sont configurés de manière dynamique :
 
-**Pour la production**, modifiez dans `api/search.js` et `api/trending.js` :
-
-```javascript
-res.setHeader('Access-Control-Allow-Origin', 'chrome-extension://YOUR_EXTENSION_ID');
+**Mode développement** (par défaut) :
+```bash
+# Variable d'environnement
+EXTENSION_ID=soon
 ```
+→ Autorise **toutes les origines** (`*`) - Pratique pour tester
+
+**Mode production** :
+```bash
+# Remplacez par votre vrai ID d'extension
+EXTENSION_ID=abcdefghijklmnop
+```
+→ Autorise **uniquement** `chrome-extension://abcdefghijklmnop`
+
+**Comment obtenir l'ID de votre extension ?**
+1. Allez sur `chrome://extensions/`
+2. Activez "Mode développeur"
+3. Copiez l'ID affiché sous le nom de votre extension
+4. Configurez-le sur Vercel dans Environment Variables
 
 ### Rate Limiting
 
