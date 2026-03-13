@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "env": {
+    "GIPHY_API_KEY": "@giphy_api_key"
+  },
+  "functions": {
+    "api/**/*.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/gifs/search",
+      "destination": "/api/search"
+    },
+    {
+      "source": "/api/gifs/trending",
+      "destination": "/api/trending"
+    }
+  ]
+}
