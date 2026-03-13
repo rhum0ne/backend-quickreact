@@ -1,22 +1,3 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node",
-      "config": {
-        "maxDuration": 10
-      }
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/api/gifs/search",
-      "destination": "/api/search"
-    },
-    {
-      "source": "/api/gifs/trending",
-      "destination": "/api/trending"
-    }
-  ]
+  "version": 2
 }
