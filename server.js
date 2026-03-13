@@ -13,7 +13,7 @@ const GIPHY_API_KEY = process.env.GIPHY_API_KEY;
 
 // CORS - autoriser uniquement votre extension
 app.use(cors({
-  origin: 'chrome-extension://YOUR_EXTENSION_ID'
+  origin: `chrome-extension://${process.env.EXTENSION_ID}`
 }));
 
 app.use(express.json());
