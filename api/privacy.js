@@ -1,8 +1,12 @@
 // Vercel Serverless Function to serve Privacy Policy
-const fs = require('fs');
-const path = require('path');
+import { readFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-module.exports = (req, res) => {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export default (req, res) => {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
@@ -22,8 +26,8 @@ module.exports = (req, res) => {
 
   try {
     // Read and serve the HTML file
-    const htmlPath = path.join(__dirname, '..', 'public', 'privacy.html');
-    const html = fs.readFileSync(htmlPath, 'utf8');
+    const htmlPath = join(__dirname, '..', 'public', 'privacy.html');
+    const html = readFileSync(htmlPath, 'utf8');
     
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.status(200).send(html);
