@@ -4,6 +4,7 @@
   "description": "API proxy pour QuickReact - cache la clé Giphy",
   "type": "module",
   "scripts": {
+    "vercel-build": "echo 'No build step required'",
     "dev": "vercel dev",
     "deploy": "vercel --prod"
   },
