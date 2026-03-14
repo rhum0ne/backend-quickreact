@@ -4,6 +4,14 @@
     {
       "source": "/privacy",
       "destination": "/api/privacy"
+    },
+    {
+      "source": "/checkout",
+      "destination": "/public/checkout.html"
+    },
+    {
+      "source": "/success",
+      "destination": "/public/success.html"
     }
   ]
 }
