@@ -2,6 +2,10 @@
   "version": 2,
   "rewrites": [
     {
+      "source": "/",
+      "destination": "/public/index.html"
+    },
+    {
       "source": "/privacy",
       "destination": "/api/privacy"
     },

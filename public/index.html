@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickReact - Express Yourself Instantly with Emojis & GIFs</title>
+    <meta name="description" content="Insert emojis and GIFs instantly on any website. 1000+ emojis, unlimited GIFs, 26 languages. Free Chrome extension.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><text x="10" y="50" font-size="40">😍</text><text x="60" y="30" font-size="30">🎬</text><text x="20" y="90" font-size="25">⭐</text></svg>') repeat;
+            opacity: 0.1;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            from { transform: translateY(0); }
+            to { transform: translateY(-100px); }
+        }
+
+        .logo {
+            font-size: 4em;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tagline {
+            font-size: 1.4em;
+            margin-bottom: 32px;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 16px 48px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-secondary {
+            display: inline-block;
+            margin-left: 16px;
+            padding: 16px 48px;
+            background: transparent;
+            color: white;
+            text-decoration: none;
+            border: 2px solid white;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-secondary:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Features */
+        .features {
+            padding: 80px 0;
+            background: #f9fafb;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 60px;
+            color: #111;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 12px;
+            color: #111;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* How it works */
+        .how-it-works {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .step {
+            text-align: center;
+            padding: 24px;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.8em;
+            font-weight: 700;
+            line-height: 60px;
+            margin-bottom: 16px;
+        }
+
+        .step h3 {
+            font-size: 1.3em;
+            margin-bottom: 12px;
+            color: #111;
+        }
+
+        .step p {
+            color: #666;
+        }
+
+        /* Premium section */
+        .premium-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .premium-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 24px;
+        }
+
+        .premium-section p {
+            font-size: 1.3em;
+            margin-bottom: 32px;
+            opacity: 0.95;
+        }
+
+        .premium-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin: 40px 0;
+            text-align: left;
+        }
+
+        .premium-feature {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .premium-feature strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        /* Stats */
+        .stats {
+            padding: 80px 0;
+            background: #111;
+            color: white;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .stat {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 0;
+            background: #f9fafb;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .testimonial {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: #111;
+        }
+
+        /* Footer */
+        footer {
+            background: #111;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        .copyright {
+            opacity: 0.6;
+            font-size: 0.9em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .tagline {
+                font-size: 1.1em;
+            }
+
+            .cta-button, .cta-secondary {
+                display: block;
+                margin: 8px auto;
+                max-width: 300px;
+            }
+
+            .features-grid, .steps, .premium-features {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">😍</div>
+            <h1>QuickReact</h1>
+            <p class="tagline">Express yourself instantly with emojis and GIFs</p>
+            <a href="https://chrome.google.com/webstore" class="cta-button">📥 Add to Chrome - Free</a>
+            <a href="/checkout" class="cta-secondary">⭐ Upgrade to Premium</a>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose QuickReact?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>1000+ Emojis</h3>
+                    <p>Access a massive library of emojis organized in 12 intuitive categories. From smileys to flags, find the perfect emoji instantly.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎬</div>
+                    <h3>Unlimited GIFs</h3>
+                    <p>Search millions of GIFs powered by Giphy. Express complex emotions with animated reactions that words alone can't capture.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Lightning Fast</h3>
+                    <p>Press Alt+E anywhere to open QuickReact instantly. No more hunting through menus or copying from other windows.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>26 Languages</h3>
+                    <p>Fully translated interface supporting English, French, Spanish, German, Chinese, Japanese, Arabic, and 19 more languages.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Privacy First</h3>
+                    <p>No tracking, no ads, no data collection. Your favorites are stored locally. We respect your privacy completely.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💻</div>
+                    <h3>Works Everywhere</h3>
+                    <p>Gmail, Twitter, Slack, Discord, WhatsApp Web, LinkedIn, GitHub - QuickReact works on every website without exception.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Install Extension</h3>
+                    <p>Add QuickReact to Chrome in one click. Free and takes just 2 seconds.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Open QuickReact</h3>
+                    <p>Click the emoji button on any text field or press Alt+E anywhere.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Choose & Insert</h3>
+                    <p>Browse categories, search, or pick a GIF. Click to insert instantly.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Express Yourself</h3>
+                    <p>Make your messages more engaging, clear, and fun!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="premium-section">
+        <div class="container">
+            <h2>✨ Upgrade to Premium</h2>
+            <p>Unlock all features with a one-time payment of just €2</p>
+            <div class="premium-features">
+                <div class="premium-feature">
+                    <strong>🎨 All 1000+ Emojis</strong>
+                    <p>Access premium categories: Food, Activities, Travel, Objects, Symbols, Flags</p>
+                </div>
+                <div class="premium-feature">
+                    <strong>🎬 Unlimited GIF Search</strong>
+                    <p>Search and insert GIFs without any restrictions</p>
+                </div>
+                <div class="premium-feature">
+                    <strong>⭐ Favorites System</strong>
+                    <p>Save your most-used emojis for instant access</p>
+                </div>
+                <div class="premium-feature">
+                    <strong>🕒 Recents History</strong>
+                    <p>Quick access to your last 50 used emojis</p>
+                </div>
+                <div class="premium-feature">
+                    <strong>💻 3 Devices</strong>
+                    <p>Use your premium license on up to 3 computers</p>
+                </div>
+                <div class="premium-feature">
+                    <strong>🚀 Priority Support</strong>
+                    <p>Get help faster when you need it</p>
+                </div>
+            </div>
+            <a href="/checkout" class="cta-button">Upgrade Now - €2</a>
+            <p style="margin-top: 16px; opacity: 0.9;">One-time payment • Lifetime access • No subscription</p>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">QuickReact in Numbers</h2>
+            <div class="stats-grid">
+                <div class="stat">
+                    <div class="stat-number">1000+</div>
+                    <div class="stat-label">Emojis Available</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">26</div>
+                    <div class="stat-label">Languages Supported</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Free Features</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Ads or Tracking</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">What Users Say</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial">
+                    <p class="testimonial-text">"QuickReact has become essential to my daily workflow. I can't imagine browsing without it anymore!"</p>
+                    <p class="testimonial-author">— Sarah M., Marketing Manager</p>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-text">"Finally, an emoji extension that actually works everywhere. Simple, fast, and beautiful."</p>
+                    <p class="testimonial-author">— Mike T., Software Developer</p>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-text">"The Alt+E shortcut is a game-changer. I use it dozens of times a day on Slack and Gmail."</p>
+                    <p class="testimonial-author">— Emma L., Content Creator</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/checkout">Premium</a>
+                <a href="/privacy">Privacy Policy</a>
+                <a href="https://github.com" target="_blank">GitHub</a>
+                <a href="https://chrome.google.com/webstore" target="_blank">Chrome Web Store</a>
+            </div>
+            <p class="copyright">© 2026 QuickReact. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
