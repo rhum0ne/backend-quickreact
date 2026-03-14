@@ -1,35 +1,8 @@
-// Vercel Serverless Function - Validate License Key
+// Vercel Serverless Function - Validate License Key with Lemon Squeezy
 // Route: /api/validate-license
 
-import { getLicenseByKey, activateLicense, incrementDeviceCount, updateValidationTimestamp, logValidation } from '../lib/database.js';
-import { isValidKeyFormat, sanitizeKey } from '../lib/license.js';
-
-// Rate limiting cache (simple in-memory, resets on function cold start)
-const rateLimitCache = new Map();
-const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour
-const RATE_LIMIT_MAX = 10; // Max 10 validations per hour per IP
-
-function checkRateLimit(ip) {
-  const now = Date.now();
-  const userLimits = rateLimitCache.get(ip) || { count: 0, resetAt: now + RATE_LIMIT_WINDOW };
-  
-  if (now > userLimits.resetAt) {
-    // Reset window
-    rateLimitCache.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW });
-    return true;
-  }
-  
-  if (userLimits.count >= RATE_LIMIT_MAX) {
-    return false;
-  }
-  
-  userLimits.count++;
-  rateLimitCache.set(ip, userLimits);
-  return true;
-}
-
 export default async function handler(req, res) {
-  // CORS headers for extension
+  // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -47,121 +20,99 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Get IP for rate limiting
-    const ip = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || 'unknown';
-    const userAgent = req.headers['user-agent'] || 'unknown';
-    
-    // Check rate limit
-    if (!checkRateLimit(ip)) {
-      res.status(429).json({
-        success: false,
-        error: 'Rate limit exceeded',
-        message: 'Too many validation attempts. Please try again later.'
-      });
-      return;
-    }
-
-    // Get license key from request
     const { licenseKey } = req.body;
     
     if (!licenseKey) {
       res.status(400).json({
         success: false,
-        error: 'Missing license key'
+        message: 'License key is required'
       });
       return;
     }
 
-    // Sanitize and validate format
-    const cleanKey = sanitizeKey(licenseKey);
+    const API_KEY = process.env.LEMONSQUEEZY_API_KEY;
     
-    if (!isValidKeyFormat(cleanKey)) {
-      await logValidation(cleanKey, false, ip, userAgent);
+    if (!API_KEY) {
+      throw new Error('Lemon Squeezy API key not configured');
+    }
+
+    // Validate license key format (optional but recommended)
+    const keyFormat = /^QR-[A-Z0-9]{4,20}$/i;
+    if (!keyFormat.test(licenseKey.trim())) {
       res.status(400).json({
         success: false,
-        error: 'Invalid license key format'
+        message: 'Invalid license key format'
       });
       return;
     }
 
-    // Check license in database
-    const license = await getLicenseByKey(cleanKey);
-    
-    if (!license) {
-      await logValidation(cleanKey, false, ip, userAgent);
-      res.status(404).json({
+    // Call Lemon Squeezy API to validate license
+    const response = await fetch('https://api.lemonsqueezy.com/v1/licenses/validate', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${API_KEY}`
+      },
+      body: JSON.stringify({
+        license_key: licenseKey.trim()
+      })
+    });
+
+    const data = await response.json();
+
+    // Check if validation was successful
+    if (!response.ok) {
+      console.error('Lemon Squeezy API error:', data);
+      res.status(400).json({
         success: false,
-        error: 'License key not found'
+        message: data.error || 'License validation failed'
       });
       return;
     }
 
-    // Check if revoked
-    if (license.status === 'revoked') {
-      await logValidation(cleanKey, false, ip, userAgent);
-      res.status(403).json({
-        success: false,
-        error: 'License has been revoked',
-        message: 'This license key has been revoked due to abuse or violation of terms.'
-      });
-      return;
-    }
-
-    // Check device limit
-    if (license.device_count >= 3 && license.activated_at) {
-      await logValidation(cleanKey, false, ip, userAgent);
-      res.status(403).json({
-        success: false,
-        error: 'Device limit reached',
-        message: 'This license key has reached the maximum of 3 devices.'
-      });
-      return;
-    }
-
-    // Activate license if first time
-    if (!license.activated_at) {
-      await activateLicense(cleanKey);
-      await logValidation(cleanKey, true, ip, userAgent);
+    // Check license status
+    if (data.valid && data.license_key.status === 'active') {
+      // Get activation info
+      const activationCount = data.meta?.activation_usage || 0;
+      const activationLimit = data.meta?.activation_limit || 3;
       
       res.status(200).json({
         success: true,
-        message: 'License activated successfully',
-        activated_at: new Date().toISOString(),
-        device_count: 1
+        message: 'License is valid and active',
+        valid: true,
+        status: data.license_key.status,
+        activation_count: activationCount,
+        activation_limit: activationLimit,
+        can_activate: activationCount < activationLimit
       });
-      return;
-    }
-
-    // Check if we need to increment device count
-    // (simple check: if last validated more than 7 days ago on a new device)
-    const daysSinceLastValidation = license.last_validated_at 
-      ? (Date.now() - new Date(license.last_validated_at).getTime()) / (1000 * 60 * 60 * 24)
-      : 999;
-    
-    if (daysSinceLastValidation > 7 && license.device_count < 3) {
-      // Might be a new device, increment count
-      await incrementDeviceCount(cleanKey);
+    } else if (data.license_key.status === 'inactive') {
+      res.status(403).json({
+        success: false,
+        message: 'License key has been deactivated',
+        valid: false,
+        status: 'inactive'
+      });
+    } else if (data.license_key.status === 'expired') {
+      res.status(403).json({
+        success: false,
+        message: 'License key has expired',
+        valid: false,
+        status: 'expired'
+      });
     } else {
-      // Just update timestamp
-      await updateValidationTimestamp(cleanKey);
+      res.status(400).json({
+        success: false,
+        message: 'Invalid license key',
+        valid: false
+      });
     }
 
-    await logValidation(cleanKey, true, ip, userAgent);
-
-    // Return success
-    res.status(200).json({
-      success: true,
-      message: 'License is valid',
-      activated_at: license.activated_at,
-      device_count: license.device_count
-    });
-    
   } catch (error) {
-    console.error('Validation error:', error);
+    console.error('License validation error:', error);
     res.status(500).json({
       success: false,
-      error: 'Validation failed',
-      message: error.message
+      message: 'Internal server error during license validation'
     });
   }
 }

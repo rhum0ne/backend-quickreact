@@ -9,7 +9,6 @@
     "deploy": "vercel --prod"
   },
   "dependencies": {
-    "@vercel/postgres": "^0.5.1",
     "@lemonsqueezy/lemonsqueezy.js": "^2.0.0"
   },
   "devDependencies": {

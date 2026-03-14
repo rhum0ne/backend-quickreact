@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activating QuickReact Premium...</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .license-box {
+            background: #f8f9fa;
+            border: 2px dashed #667eea;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 24px;
+            font-weight: 600;
+            color: #667eea;
+            letter-spacing: 2px;
+        }
+
+        .steps {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+
+        .steps h3 {
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .steps ol {
+            padding-left: 25px;
+        }
+
+        .steps li {
+            padding: 10px 0;
+            color: #555;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+        }
+
+        .note {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 8px;
+            text-align: left;
+            color: #856404;
+        }
+
+        .note strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .success-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #autoActivating {
+            display: none;
+        }
+
+        #manualActivation {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Auto-activation attempt -->
+        <div id="autoActivating">
+            <div class="logo">🚀</div>
+            <h1>Opening QuickReact Extension...</h1>
+            <p class="subtitle">Attempting to activate your premium license automatically</p>
+            <div class="loader"></div>
+            <p style="color: #666; margin-top: 20px; font-size: 14px;">
+                If the extension doesn't open automatically, follow the manual steps below.
+            </p>
+        </div>
+
+        <!-- Manual activation instructions -->
+        <div id="manualActivation">
+            <div class="success-icon">🎉</div>
+            <h1>Thank You for Your Purchase!</h1>
+            <p class="subtitle">Your license key is ready. Follow these simple steps to activate:</p>
+
+            <div class="license-box" id="licenseKey">
+                Loading...
+            </div>
+
+            <div class="steps">
+                <h3>Activation Steps:</h3>
+                <ol>
+                    <li><strong>Click the button below</strong> to open the activation page</li>
+                    <li>Your license key will be <strong>pre-filled automatically</strong></li>
+                    <li>Click <strong>"Activate"</strong> button</li>
+                    <li>Done! 🎊 Enjoy all premium features</li>
+                </ol>
+            </div>
+
+            <div class="buttons">
+                <a href="#" class="btn btn-primary" id="openExtension">
+                    Open Extension & Activate
+                </a>
+                <button class="btn btn-secondary" id="copyKey">
+                    📋 Copy License Key
+                </button>
+            </div>
+
+            <div class="note">
+                <strong>💡 Can't find the extension?</strong>
+                Make sure QuickReact extension is installed. The license key has also been sent to your email.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get license key from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const licenseKey = urlParams.get('key') || urlParams.get('license_key') || 'QR-XXXXXXXX';
+        
+        // Extension ID (you'll need to replace this with your actual extension ID)
+        const EXTENSION_ID = 'your-extension-id-here'; // TODO: Replace with actual ID
+        
+        const licenseKeyElement = document.getElementById('licenseKey');
+        const openExtensionBtn = document.getElementById('openExtension');
+        const copyKeyBtn = document.getElementById('copyKey');
+        const autoActivatingSection = document.getElementById('autoActivating');
+        const manualActivationSection = document.getElementById('manualActivation');
+
+        // Display license key
+        if (licenseKey && licenseKey !== 'QR-XXXXXXXX') {
+            licenseKeyElement.textContent = licenseKey;
+            
+            // Try to auto-activate using extension protocol
+            attemptAutoActivation();
+        } else {
+            // No key found
+            licenseKeyElement.textContent = 'No license key found';
+            manualActivationSection.style.display = 'block';
+        }
+
+        // Build activation URL
+        function getActivationUrl() {
+            // Try chrome-extension:// protocol first
+            // Format: chrome-extension://EXTENSION_ID/activate.html?key=LICENSE_KEY
+            const extensionUrl = `chrome-extension://${EXTENSION_ID}/activate.html?key=${licenseKey}`;
+            return extensionUrl;
+        }
+
+        // Attempt automatic activation
+        function attemptAutoActivation() {
+            if (licenseKey === 'QR-XXXXXXXX') {
+                showManualActivation();
+                return;
+            }
+
+            autoActivatingSection.style.display = 'block';
+            
+            // Try to open extension
+            const activationUrl = getActivationUrl();
+            
+            // Attempt 1: Direct navigation
+            setTimeout(() => {
+                window.location.href = activationUrl;
+            }, 500);
+
+            // Fallback to manual after 3 seconds
+            setTimeout(() => {
+                showManualActivation();
+            }, 3000);
+        }
+
+        // Show manual activation
+        function showManualActivation() {
+            autoActivatingSection.style.display = 'none';
+            manualActivationSection.style.display = 'block';
+        }
+
+        // Open extension button
+        openExtensionBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const activationUrl = getActivationUrl();
+            window.open(activationUrl, '_blank');
+        });
+
+        // Copy key button
+        copyKeyBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(licenseKey);
+                copyKeyBtn.textContent = '✓ Copied!';
+                copyKeyBtn.style.background = '#4caf50';
+                copyKeyBtn.style.color = 'white';
+                copyKeyBtn.style.borderColor = '#4caf50';
+                
+                setTimeout(() => {
+                    copyKeyBtn.textContent = '📋 Copy License Key';
+                    copyKeyBtn.style.background = '';
+                    copyKeyBtn.style.color = '';
+                    copyKeyBtn.style.borderColor = '';
+                }, 2000);
+            } catch (err) {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = licenseKey;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                
+                copyKeyBtn.textContent = '✓ Copied!';
+            }
+        });
+    </script>
+</body>
+</html>

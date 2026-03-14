@@ -10,12 +10,8 @@
       "destination": "/api/privacy"
     },
     {
-      "source": "/checkout",
-      "destination": "/public/checkout.html"
-    },
-    {
-      "source": "/success",
-      "destination": "/public/success.html"
+      "source": "/activate",
+      "destination": "/public/activate.html"
     }
   ]
 }
