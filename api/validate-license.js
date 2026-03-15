@@ -72,33 +72,36 @@ export default async function handler(req, res) {
     }
 
     // Check license status
-    if (data.valid && data.license_key.status === 'active') {
-      // Get activation info
-      const activationCount = data.meta?.activation_usage || 0;
-      const activationLimit = data.meta?.activation_limit || 3;
-      
-      res.status(200).json({
-        success: true,
-        message: 'License is valid and active',
-        valid: true,
-        status: data.license_key.status,
-        activation_count: activationCount,
-        activation_limit: activationLimit,
-        can_activate: activationCount < activationLimit
-      });
-    } else if (data.license_key.status === 'inactive') {
+    // Note: 'inactive' means never activated yet (0/3), which is valid!
+    // Only reject if 'disabled' (manually deactivated) or 'expired'
+    const status = data.license_key.status;
+    const activationCount = data.meta?.activation_usage || 0;
+    const activationLimit = data.meta?.activation_limit || 3;
+    
+    if (status === 'disabled') {
       res.status(403).json({
         success: false,
-        message: 'License key has been deactivated',
+        message: 'License key has been disabled',
         valid: false,
-        status: 'inactive'
+        status: 'disabled'
       });
-    } else if (data.license_key.status === 'expired') {
+    } else if (status === 'expired') {
       res.status(403).json({
         success: false,
         message: 'License key has expired',
         valid: false,
         status: 'expired'
+      });
+    } else if (data.valid) {
+      // License is valid (can be 'inactive' or 'active')
+      res.status(200).json({
+        success: true,
+        message: 'License is valid',
+        valid: true,
+        status: status,
+        activation_count: activationCount,
+        activation_limit: activationLimit,
+        can_activate: activationCount < activationLimit
       });
     } else {
       res.status(400).json({
