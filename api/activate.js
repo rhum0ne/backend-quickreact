@@ -7,222 +7,218 @@ export default function handler(req, res) {
   
   // HTML page with embedded license key
   const html = `<!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Activate QuickReact Premium</title>
+    <title>Activation QuickReact Premium</title>
     <style>
+        /* Mêmes variables que l'extension pour une cohérence parfaite */
+        :root {
+            --bg-body: #f6f8fa;
+            --bg-surface: #ffffff;
+            --border-color: #d0d7de;
+            --text-main: #24292f;
+            --text-muted: #57606a;
+            --primary: #0969da;
+            --primary-hover: #0353a4;
+            --success-text: #1a7f37;
+            --radius: 6px;
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.5;
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
             padding: 20px;
         }
 
         .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 50px;
-            max-width: 600px;
-            text-align: center;
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            max-width: 480px;
+            width: 100%;
+            padding: 32px;
         }
 
-        .logo {
-            font-size: 80px;
-            margin-bottom: 20px;
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .header-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
         }
 
         h1 {
-            color: #333;
-            font-size: 32px;
-            margin-bottom: 15px;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 18px;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .license-box {
-            background: #f8f9fa;
-            border: 2px dashed #667eea;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 30px 0;
-            font-family: 'Courier New', monospace;
             font-size: 20px;
             font-weight: 600;
-            color: #667eea;
-            letter-spacing: 2px;
-            word-break: break-all;
-        }
-
-        .steps {
-            text-align: left;
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 12px;
-            margin: 30px 0;
-        }
-
-        .steps h3 {
-            color: #333;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .steps ol {
-            padding-left: 25px;
-        }
-
-        .steps li {
-            padding: 10px 0;
-            color: #555;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-
-        .buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 16px;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
-        .btn-secondary:hover {
-            background: #f8f9fa;
-        }
-
-        .note {
-            margin-top: 30px;
-            padding: 20px;
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            border-radius: 8px;
-            text-align: left;
-            color: #856404;
-            font-size: 14px;
-        }
-
-        .note strong {
-            display: block;
             margin-bottom: 8px;
         }
 
-        .features {
-            margin-top: 30px;
-            text-align: left;
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
-        }
-
-        .features h3 {
-            color: #333;
-            font-size: 16px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .features ul {
-            list-style: none;
-        }
-
-        .features li {
-            padding: 8px 0;
-            color: #555;
+        .subtitle {
             font-size: 14px;
+            color: var(--text-muted);
         }
 
-        .features li::before {
-            content: "✓ ";
-            color: #4caf50;
-            font-weight: bold;
-            margin-right: 8px;
+        .license-container {
+            margin: 24px 0;
+        }
+
+        .license-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .license-box {
+            background-color: var(--bg-body);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 16px;
+            font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: 1px;
+            word-break: break-all;
+            color: var(--text-main);
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius);
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: background-color 0.15s ease-in-out;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .instructions {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .instructions h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .steps {
+            list-style: none;
+            counter-reset: step;
+        }
+
+        .steps li {
+            position: relative;
+            padding-left: 32px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .steps li::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: -2px;
+            width: 22px;
+            height: 22px;
+            background-color: var(--bg-body);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .steps li strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .support-note {
+            margin-top: 24px;
+            background-color: var(--bg-body);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: var(--radius);
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">🎉</div>
-        <h1>Thank You for Your Purchase!</h1>
-        <p class="subtitle">Your license key is ready. Follow these steps to activate premium features:</p>
-
-        <div class="license-box" id="licenseKey">
-            ${licenseKey || 'No license key provided'}
+        <div class="header">
+            <div class="header-icon">🎉</div>
+            <h1>Merci pour votre achat !</h1>
+            <p class="subtitle">Votre licence QuickReact Premium est prête.</p>
         </div>
 
-        <div class="steps">
-            <h3>📋 How to Activate:</h3>
-            <ol>
-                <li><strong>Copy your license key</strong> using the button below</li>
-                <li><strong>Open QuickReact extension</strong> (click the extension icon in Chrome)</li>
-                <li><strong>Click the ⭐ Premium button</strong> at the top</li>
-                <li><strong>Paste your license key</strong> in the "Already have a license key?" section</li>
-                <li><strong>Click "Activate"</strong> and enjoy! 🎊</li>
-            </ol>
-        </div>
-
-        <div class="buttons">
+        <div class="license-container">
+            <span class="license-label">Votre clé de licence</span>
+            <div class="license-box" id="licenseKey">
+                ${licenseKey || 'Aucune clé fournie'}
+            </div>
             <button class="btn btn-primary" id="copyBtn">
-                📋 Copy License Key
+                Copier la clé
             </button>
         </div>
 
-        <div class="features">
-            <h3>✨ Premium Features Unlocked:</h3>
-            <ul>
-                <li>1000+ emojis across 12 categories</li>
-                <li>Unlimited GIF search with Giphy</li>
-                <li>Favorites system for quick access</li>
-                <li>Recent emojis history (up to 50)</li>
-                <li>Use on up to 3 devices</li>
-                <li>Priority support</li>
+        <div class="instructions">
+            <h3>Comment activer votre licence :</h3>
+            <ul class="steps">
+                <li><strong>Copiez la clé</strong> à l'aide du bouton ci-dessus.</li>
+                <li><strong>Ouvrez l'extension QuickReact</strong> depuis votre navigateur (cliquez sur l'icône de l'extension).</li>
+                <li>Cliquez sur le bouton <strong>Activer une clé</strong>.</li>
+                <li><strong>Collez votre clé</strong> et cliquez sur Activer !</li>
             </ul>
         </div>
 
-        <div class="note">
-            <strong>💡 Can't find the extension?</strong>
-            Make sure QuickReact is installed from Chrome Web Store. Your license key has also been sent to your email.
+        <div class="support-note">
+            Vous avez également reçu cette clé par email. Assurez-vous d'avoir téléchargé l'extension depuis le Chrome Web Store.
         </div>
     </div>
 
@@ -231,37 +227,38 @@ export default function handler(req, res) {
         const copyBtn = document.getElementById('copyBtn');
 
         copyBtn.addEventListener('click', async () => {
-            if (!licenseKey || licenseKey === 'No license key provided') {
-                alert('No license key to copy!');
+            if (!licenseKey || licenseKey === 'Aucune clé fournie') {
+                alert('Aucune clé à copier !');
                 return;
             }
 
             try {
                 await navigator.clipboard.writeText(licenseKey);
-                copyBtn.textContent = '✓ Copied!';
-                copyBtn.style.background = '#4caf50';
-                
-                setTimeout(() => {
-                    copyBtn.textContent = '📋 Copy License Key';
-                    copyBtn.style.background = '';
-                }, 2000);
+                showSuccess();
             } catch (err) {
-                // Fallback
+                // Fallback de sécurité (anciens navigateurs)
                 const textarea = document.createElement('textarea');
                 textarea.value = licenseKey;
                 document.body.appendChild(textarea);
                 textarea.select();
-                document.execCommand('copy');
+                try {
+                    document.execCommand('copy');
+                    showSuccess();
+                } catch (e) {
+                    console.error('Échec de la copie', e);
+                }
                 document.body.removeChild(textarea);
-                
-                copyBtn.textContent = '✓ Copied!';
-                copyBtn.style.background = '#4caf50';
             }
         });
 
-        // Auto-focus on license (optional)
-        if (licenseKey && licenseKey !== 'No license key provided') {
-            document.getElementById('licenseKey').style.animation = 'pulse 1s';
+        function showSuccess() {
+            copyBtn.innerText = '✓ Clé copiée !';
+            copyBtn.style.backgroundColor = 'var(--success-text)';
+            
+            setTimeout(() => {
+                copyBtn.innerText = 'Copier la clé';
+                copyBtn.style.backgroundColor = '';
+            }, 2500);
         }
     </script>
 </body>
