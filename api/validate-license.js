@@ -37,7 +37,7 @@ export default async function handler(req, res) {
     }
 
     // Validate license key format (UUID format: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX)
-    const keyFormat = /^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$/i;
+    const keyFormat = /^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$/i;
     if (!keyFormat.test(licenseKey.trim())) {
       res.status(400).json({
         success: false,
