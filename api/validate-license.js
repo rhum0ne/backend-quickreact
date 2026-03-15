@@ -36,12 +36,12 @@ export default async function handler(req, res) {
       throw new Error('Lemon Squeezy API key not configured');
     }
 
-    // Validate license key format (optional but recommended)
-    const keyFormat = /^QR-[A-Z0-9]{4,20}$/i;
+    // Validate license key format (UUID format: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX)
+    const keyFormat = /^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$/i;
     if (!keyFormat.test(licenseKey.trim())) {
       res.status(400).json({
         success: false,
-        message: 'Invalid license key format'
+        message: 'Invalid license key format. Expected UUID format.'
       });
       return;
     }
