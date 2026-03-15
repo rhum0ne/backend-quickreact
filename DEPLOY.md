@@ -251,3 +251,48 @@ Vercel redéploie automatiquement à chaque push ! 🚀
 ---
 
 **Besoin d'aide ?** Consultez la [documentation Vercel](https://vercel.com/docs)
+
+---
+
+## 📊 Activer Vercel Analytics
+
+Vercel Analytics vous permet de suivre les performances et l'utilisation de votre backend.
+
+### Méthode 1 : Via le Dashboard Vercel (recommandé)
+
+1. **Accédez à votre projet**
+   - Dashboard Vercel → Votre projet (`quickreact-api`)
+
+2. **Activez Web Analytics**
+   - Onglet "Analytics"
+   - Cliquez sur "Enable Web Analytics"
+   - Confirmez
+
+3. **C'est tout !**
+   - Le script est déjà ajouté dans les pages HTML (`index.html`, `activate.html`, `privacy.html`)
+   - Les métriques apparaîtront dans l'onglet "Analytics" après quelques visites
+
+### Méthode 2 : Via CLI
+
+```bash
+vercel analytics enable
+```
+
+### Que pouvez-vous suivre ?
+
+- **Pages vues** : Nombre de visiteurs sur `/`, `/activate`, `/privacy`
+- **Performances** : Temps de chargement des pages
+- **Géolocalisation** : D'où viennent vos utilisateurs
+- **Appareils** : Desktop vs Mobile
+
+### Coût
+
+- **Free Tier** : 2,500 événements/mois inclus
+- **Pro** : 100,000 événements/mois ($10/mois)
+
+Pour QuickReact, le plan gratuit est largement suffisant ! 📈
+
+---
+
+**Documentation complète** : [Vercel Analytics Docs](https://vercel.com/docs/analytics)
+
