@@ -61,6 +61,16 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
+    // Log response for debugging
+    console.log('Lemon Squeezy response:', { 
+      ok: response.ok, 
+      status: response.status,
+      valid: data.valid,
+      license_key: data.license_key ? { status: data.license_key.status } : null,
+      error: data.error,
+      message: data.message
+    });
+
     // Check if validation was successful
     if (!response.ok) {
       console.error('Lemon Squeezy API error:', data);
